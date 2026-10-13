@@ -105,6 +105,23 @@ The checked-in evaluation configuration is for `T=10`. For a `T=6` checkpoint, s
 
 The source sign-language corpora and annotations are not redistributed in this repository. Obtain access from the respective corpus providers and follow their licence and consent conditions.
 
+## Citation
+
+If you use this code, please cite the associated article:
+
+> Sargano, A. B., Miquel Blasco, C., Susman, M., Börstell, C., & Kimmelman, V. (2026). BlinkFusionNet: Gated multimodal fusion for robust blink event detection in sign language corpora. *Computer Vision and Image Understanding*. In press. https://www.sciencedirect.com/science/article/pii/S1077314226003450
+
+```bibtex
+@article{sargano2026blinkfusionnet,
+  title   = {BlinkFusionNet: Gated Multimodal Fusion for Robust Blink Event Detection in Sign Language Corpora},
+  author  = {Sargano, Allah Bux and Miquel Blasco, Carla and Susman, Margaux and B{\"o}rstell, Carl and Kimmelman, Vadim},
+  journal = {Computer Vision and Image Understanding},
+  year    = {2026},
+  note    = {In press},
+  url     = {https://www.sciencedirect.com/science/article/pii/S1077314226003450}
+}
+```
+
 ## Licence
 
 This code is released under the MIT License. See `LICENSE`.
