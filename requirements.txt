@@ -1,0 +1,12 @@
+albumentations
+insightface
+mediapipe
+numpy
+onnxruntime
+opencv-python
+pandas
+Pillow
+scikit-learn
+torch
+torchvision
+tqdm
