@@ -1,0 +1,24 @@
+BlinkFusionNet Semi-Automatic Blink Annotation Tool
+===================================================
+
+1. Put model_gated_fusion_seed_123.pth beside blink_annotator.py.
+2. Install the packages listed in requirements.txt.
+3. Run:
+
+   python blink_annotator.py --input PATH_TO_VIDEO_OR_FOLDER --output PATH_TO_RESULTS
+
+4. Open the generated annotations/blinks_<video>.eaf file in ELAN with the
+   original source video.
+5. Verify every proposed blink, correct boundaries, delete false positives,
+   and add missed blinks.
+6. Save the human-verified EAF under a new filename.
+
+The model always operates on its original 25-FPS temporal timeline. The tool
+automatically reads the input video's FPS, selects the nearest source frames,
+and writes ELAN annotations at the corresponding original-video times.
+
+Run the built-in FPS check:
+
+   python blink_annotator.py --self-test
+
+Read README.md for installation details, outputs, limitations and citation.

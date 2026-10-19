@@ -2,13 +2,14 @@
 
 Reference implementation for **BlinkFusionNet: Gated multimodal fusion for robust blink event detection in sign language corpora**.
 
-The repository contains the final code used for preprocessing, training, and evaluation. Dataset files, experimental outputs, and trained model checkpoints are not included.
+The repository contains the final code used for preprocessing, training, and evaluation, together with the released semi-automatic ELAN blink-annotation tool. Dataset files and experimental outputs are not included. The annotation tool's verified inference checkpoint is distributed through Git LFS.
 
 ## Files
 
 - `preprocess.py` filters and crops detected faces, computes dense optical flow, extracts MediaPipe eye landmarks, and verifies alignment between the generated streams.
 - `train.py` trains the RGB, optical-flow, and geometric-stream model with feature-wise gated fusion and a bidirectional LSTM.
 - `evaluate.py` performs non-overlapping window evaluation and stride-1 frame evaluation with mean probability aggregation.
+- `annotation_tool/` contains the semi-automatic blink pre-annotation tool, its verified checkpoint, installation requirements, and detailed ELAN verification instructions.
 
 ## Installation
 
@@ -101,6 +102,16 @@ python evaluate.py
 
 The checked-in evaluation configuration is for `T=10`. For a `T=6` checkpoint, set `ACCEPT_GROUPS = [6]` and `TIME_SEQUENCE = 6` in the `Config` class.
 
+## Semi-automatic ELAN annotation tool
+
+The released annotation tool proposes blink intervals for sign-language videos and writes them to an ELAN `.eaf` file plus blink-only CSV/XLSX tables. It uses the published six-frame checkpoint and preserves the original preprocessing, model, probability aggregation, hysteresis thresholds, and temporal cleanup logic.
+
+Input videos may use different constant frame rates. The tool reads each video's native FPS and samples it by timestamp onto the checkpoint's original 25-FPS temporal timeline; generated ELAN intervals remain aligned to the original video time. Built-in mapping checks cover 24, 25, 29.97, 30, 50, and 60 FPS.
+
+This is a **semi-automatic pre-annotation tool**. Every proposed blink must be opened with the source video in ELAN and verified by a human annotator. Accuracy can vary with lighting, motion blur, face scale, head rotation, glasses, and hand–face occlusion. The unreviewed machine output should not be treated as final linguistic annotation.
+
+See [`annotation_tool/README.md`](annotation_tool/README.md) for installation, commands, outputs, limitations, and the required manual-verification workflow.
+
 ## Data availability
 
 The source sign-language corpora and annotations are not redistributed in this repository. Obtain access from the respective corpus providers and follow their licence and consent conditions.
@@ -109,7 +120,7 @@ The source sign-language corpora and annotations are not redistributed in this r
 
 If you use this code, please cite the associated article:
 
-> Sargano, A. B., Miquel Blasco, C., Susman, M., Börstell, C., & Kimmelman, V. (2026). BlinkFusionNet: Gated multimodal fusion for robust blink event detection in sign language corpora. *Computer Vision and Image Understanding*. In press. https://www.sciencedirect.com/science/article/pii/S1077314226003450
+> Sargano, A. B., Miquel Blasco, C., Susman, M., Börstell, C., & Kimmelman, V. (2026). BlinkFusionNet: Gated multimodal fusion for robust blink event detection in sign language corpora. *Computer Vision and Image Understanding*, 104978. https://doi.org/10.1016/j.cviu.2026.104978
 
 ```bibtex
 @article{sargano2026blinkfusionnet,
@@ -117,8 +128,9 @@ If you use this code, please cite the associated article:
   author  = {Sargano, Allah Bux and Miquel Blasco, Carla and Susman, Margaux and B{\"o}rstell, Carl and Kimmelman, Vadim},
   journal = {Computer Vision and Image Understanding},
   year    = {2026},
-  note    = {In press},
-  url     = {https://www.sciencedirect.com/science/article/pii/S1077314226003450}
+  pages   = {104978},
+  doi     = {10.1016/j.cviu.2026.104978},
+  url     = {https://doi.org/10.1016/j.cviu.2026.104978}
 }
 ```
 

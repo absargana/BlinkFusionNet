@@ -15,6 +15,7 @@ results/
 *.pt
 *.ckpt
 *.onnx
+!annotation_tool/model_gated_fusion_seed_123.pth
 *.csv
 *.docx
 *.xlsx
