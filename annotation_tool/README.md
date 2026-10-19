@@ -2,9 +2,9 @@
 
 This tool generates **candidate eye-blink annotations** from sign-language videos. It writes the detected blink intervals to an ELAN `.eaf` file and to blink-only CSV/XLSX tables. The ELAN output is intended to be opened with the original video so that an annotator can verify, correct, add or remove blink events.
 
-The tool is therefore **semi-automatic**, not a replacement for human annotation. Its reliability depends on the video, including face scale, lighting, motion blur, head rotation, glasses and hand–face occlusion. Do not claim a fixed accuracy for an unseen corpus without evaluating it against manually verified annotations from that corpus.
+The tool is therefore **semi-automatic**, not a replacement for human annotation. Its reliability depends on the video, including face scale, lighting, motion blur, head rotation, glasses and hand–face occlusion. 
 
-## What has—and has not—changed
+## What has—and has not—changed from the original version
 
 The released inference logic is preserved from the original 25-FPS annotation tool:
 
