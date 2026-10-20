@@ -102,7 +102,7 @@ python evaluate.py
 
 The checked-in evaluation configuration is for `T=10`. For a `T=6` checkpoint, set `ACCEPT_GROUPS = [6]` and `TIME_SEQUENCE = 6` in the `Config` class.
 
-## Semi-automatic ELAN annotation tool
+## Blink annotation tool
 
 The released annotation tool proposes blink intervals for sign-language videos and writes them to an ELAN `.eaf` file plus blink-only CSV/XLSX tables. It uses the published six-frame checkpoint and preserves the original preprocessing, model, probability aggregation, hysteresis thresholds, and temporal cleanup logic.
 
