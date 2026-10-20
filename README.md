@@ -114,7 +114,7 @@ See [`annotation_tool/README.md`](annotation_tool/README.md) for installation, c
 
 ## Data availability
 
-The source sign-language corpora and annotations are not redistributed in this repository. Obtain access from the respective corpus providers and follow their licence and consent conditions.
+The source sign-language corpora and annotations are not redistributed in this repository. Obtain access from the respective corpus providers and follow their licence and consent conditions. Here is the link for French sign language videos: https://www.ortolang.fr/market/corpora/dicta-sign-lsf-v2/v1 
 
 ## Citation
 
