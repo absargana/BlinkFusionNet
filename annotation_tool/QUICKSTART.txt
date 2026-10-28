@@ -1,17 +1,42 @@
 BlinkFusionNet Semi-Automatic Blink Annotation Tool
 ===================================================
 
-1. Put model_gated_fusion_seed_123.pth beside blink_annotator.py.
-2. Install the packages listed in requirements.txt.
-3. Run:
+Recommended setup (Python 3.12):
 
-   python blink_annotator.py --input PATH_TO_VIDEO_OR_FOLDER --output PATH_TO_RESULTS
+1. Clone the repository with Git LFS so the 38 MB checkpoint is downloaded:
 
-4. Open the generated annotations/blinks_<video>.eaf file in ELAN with the
+   git lfs install
+   git clone https://github.com/absargana/BlinkFusionNet.git
+   cd BlinkFusionNet/annotation_tool
+   git lfs pull
+
+2. Create an environment and install the annotation-tool requirements.
+
+   Windows PowerShell:
+   py -3.12 -m venv .venv
+   .\.venv\Scripts\Activate.ps1
+   python -m pip install --upgrade pip
+   python -m pip install -r requirements.txt
+
+   Linux/macOS:
+   python3.12 -m venv .venv
+   source .venv/bin/activate
+   python -m pip install --upgrade pip
+   python -m pip install -r requirements.txt
+
+3. Verify the installation:
+
+   python blink_annotator.py --self-test
+
+4. Process one video or every supported video directly inside a folder:
+
+   python blink_annotator.py --input "PATH_TO_VIDEO_OR_FOLDER" --output "PATH_TO_RESULTS"
+
+5. Open the generated annotations/blinks_<video>.eaf file in ELAN with the
    original source video.
-5. Verify every proposed blink, correct boundaries, delete false positives,
+6. Verify every proposed blink, correct boundaries, delete false positives,
    and add missed blinks.
-6. Save the human-verified EAF under a new filename.
+7. Save the human-verified EAF under a new filename.
 
 The model always operates on its original 25-FPS temporal timeline. The tool
 automatically reads the input video's FPS, selects the nearest source frames,
@@ -21,4 +46,9 @@ Run the built-in FPS check:
 
    python blink_annotator.py --self-test
 
-Read README.md for installation details, outputs, limitations and citation.
+The folder scan is not recursive. Supported extensions are .mp4, .avi, .mov,
+.mkv, .mpeg and .mpg. Quote paths that contain spaces.
+
+If the checkpoint is missing or very small, run "git lfs pull" from the
+repository root. Read README.md for full installation details, troubleshooting,
+outputs, limitations, privacy guidance and citation.

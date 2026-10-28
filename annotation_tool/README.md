@@ -54,29 +54,80 @@ This release supports ordinary **constant-frame-rate** videos, including fractio
 
 For a genuinely variable-frame-rate video, first convert it to a constant-frame-rate video while preserving duration and audio/video synchronization. The tool stops when it cannot obtain a valid FPS rather than silently creating inaccurate ELAN times.
 
-## Requirements
+## Before installation
 
-- Python 3.9 or a compatible Python version
-- Windows, Linux or macOS
-- CPU processing is supported; a compatible NVIDIA GPU is faster
-- Sufficient disk space for temporary face crops and optical-flow images
-- ELAN for manual verification of the generated `.eaf` files
+You need:
 
-Install the Python dependencies in a dedicated environment:
+- Python 3.10--3.12 (Python 3.12 is recommended);
+- Git and [Git LFS](https://git-lfs.com/), because the released checkpoint is stored with Git LFS;
+- Windows, Linux or macOS;
+- sufficient free disk space for the environment and generated face crops/optical-flow images; and
+- [ELAN](https://archive.mpi.nl/tla/elan) to inspect and correct the generated `.eaf` annotations.
+
+CPU processing is supported. A compatible NVIDIA GPU can accelerate PyTorch inference, but it is not required.
+
+## Installation
+
+### 1. Clone the repository and download the checkpoint
 
 ```bash
-python -m venv blinkfusionnet_env
+git lfs install
+git clone https://github.com/absargana/BlinkFusionNet.git
+cd BlinkFusionNet/annotation_tool
+git lfs pull
 ```
 
-Activate it, then install:
+The checkpoint should be approximately 38 MB. If it is only a small text file, Git LFS has not downloaded the model; run `git lfs pull` again from the repository root.
+
+If you downloaded a ZIP archive instead of cloning, confirm that `model_gated_fusion_seed_123.pth` is approximately 38 MB before continuing. Cloning with Git LFS is the recommended installation method.
+
+### 2. Create and activate an isolated Python environment
+
+Windows PowerShell:
+
+```powershell
+py -3.12 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+```
+
+If the `py` launcher is unavailable, replace `py -3.12` with the command for your Python installation, such as `python`.
+
+Linux/macOS:
 
 ```bash
-pip install -r requirements.txt
+python3.12 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-The provided requirements use CPU ONNX Runtime for portability. Users with a compatible NVIDIA/CUDA installation may replace `onnxruntime` with the matching `onnxruntime-gpu` package. Install PyTorch using the command recommended for your operating system and CUDA version if the standard installation does not match your hardware.
+Using `python -m pip` ensures that packages are installed into the active environment.
 
-InsightFace may download its `buffalo_l` model files on the first run. Internet access may therefore be required once. Users are responsible for reviewing the licences and usage conditions of third-party models and dependencies.
+### 3. Verify the installation
+
+Run the lightweight frame-rate mapping test:
+
+```bash
+python blink_annotator.py --self-test
+```
+
+Expected final line:
+
+```text
+FPS self-checks PASS: 24, 25, 29.97, 30, 50 and 60 FPS.
+```
+
+You can also inspect all command-line options with:
+
+```bash
+python blink_annotator.py --help
+```
+
+The provided requirements use CPU ONNX Runtime for portability. Users with a compatible NVIDIA/CUDA installation may replace `onnxruntime` with the matching `onnxruntime-gpu` package. If the standard PyTorch installation does not match your GPU, use the installation command provided by the [official PyTorch selector](https://pytorch.org/get-started/locally/).
+
+On the first real video run, InsightFace may download its `buffalo_l` face-analysis model. Internet access may therefore be required once. Users are responsible for reviewing the licences and usage conditions of third-party models and dependencies.
 
 ## Checkpoint
 
@@ -100,10 +151,18 @@ If the hash differs, processing stops. This prevents accidental use of an incomp
 
 ## Quick start
 
+Run the following commands from the `annotation_tool` directory with the virtual environment activated. Paths containing spaces must be enclosed in quotation marks.
+
 Process one video:
 
 ```bash
 python blink_annotator.py --input path/to/video.mp4 --output path/to/results
+```
+
+Windows example:
+
+```powershell
+python blink_annotator.py --input "C:\Videos\example.mp4" --output "C:\Videos\Blink results"
 ```
 
 Process every supported video directly inside a folder:
@@ -111,6 +170,8 @@ Process every supported video directly inside a folder:
 ```bash
 python blink_annotator.py --input path/to/videos --output path/to/results
 ```
+
+Folder processing is not recursive. Videos inside subfolders are not processed. Supported extensions are `.mp4`, `.avi`, `.mov`, `.mkv`, `.mpeg` and `.mpg`.
 
 Specify the checkpoint explicitly when it is not beside the script:
 
@@ -129,6 +190,8 @@ Check frame-rate mapping without loading the model or processing a video:
 ```bash
 python blink_annotator.py --self-test
 ```
+
+The first full run can take additional time while InsightFace downloads its face-analysis model. CPU processing can also be substantially slower than the source video's duration.
 
 ## Outputs
 
@@ -172,6 +235,46 @@ blinks_example_human_verified.eaf
 ```
 
 The human-verified file—not the unreviewed machine output—should be treated as the final linguistic annotation.
+
+## Troubleshooting
+
+### Checkpoint hash or checkpoint-not-found error
+
+Make sure `model_gated_fusion_seed_123.pth` is beside `blink_annotator.py` and is approximately 38 MB. From the repository root, run:
+
+```bash
+git lfs pull
+```
+
+The expected SHA-256 is:
+
+```text
+CFEB5281BB2CE56A08D8234BA4F8D3C15E0CC48F2055575F647B5B1CBECB8D65
+```
+
+### `ModuleNotFoundError`
+
+Activate the virtual environment and reinstall with the same Python interpreter used to run the tool:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### PowerShell blocks environment activation
+
+You can run the environment's interpreter directly without changing PowerShell's execution policy:
+
+```powershell
+.\.venv\Scripts\python.exe blink_annotator.py --self-test
+```
+
+### Output already exists
+
+The tool protects existing results. Choose a different output directory or add `--overwrite` only when you intentionally want to replace that video's existing result folder.
+
+### Video FPS cannot be read
+
+Convert the source to a constant-frame-rate video before running the tool. Preserve the video's duration and audio/video synchronization, then manually verify the resulting ELAN intervals against the converted video.
 
 ## Interpretation and limitations
 

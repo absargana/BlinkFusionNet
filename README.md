@@ -110,7 +110,20 @@ Input videos may use different constant frame rates. The tool reads each video's
 
 This is a **semi-automatic pre-annotation tool**. Every proposed blink must be opened with the source video in ELAN and verified by a human annotator. Accuracy can vary with lighting, motion blur, face scale, head rotation, glasses, and hand–face occlusion. The unreviewed machine output should not be treated as final linguistic annotation.
 
-See [`annotation_tool/README.md`](annotation_tool/README.md) for installation, commands, outputs, limitations, and the required manual-verification workflow.
+The annotation tool has its own pinned dependency file. Install it from the tool directory rather than using the repository-level requirements:
+
+```bash
+git lfs install
+git clone https://github.com/absargana/BlinkFusionNet.git
+cd BlinkFusionNet/annotation_tool
+git lfs pull
+python -m venv .venv
+# Activate .venv for your operating system, then run:
+python -m pip install -r requirements.txt
+python blink_annotator.py --self-test
+```
+
+See [`annotation_tool/README.md`](annotation_tool/README.md) for platform-specific installation commands, checkpoint verification, video-processing examples, outputs, troubleshooting, limitations, privacy guidance, and the required manual-verification workflow.
 
 ## Data availability
 
